@@ -16,6 +16,11 @@ public class ContiController {
     @Autowired
     private ContiService contiService;
 
+    @GetMapping("/test")
+    public String test() {
+        return "test";
+    }
+
     @GetMapping("/dates")
     public List<Date> getContiDates() {
         return contiService.getAllContiDates();
