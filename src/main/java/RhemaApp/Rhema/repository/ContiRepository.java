@@ -1,6 +1,6 @@
-package repository;
+package RhemaApp.Rhema.repository;
 
-import entity.Conti;
+import RhemaApp.Rhema.entity.Conti;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ContiRepository extends JpaRepository<Conti, Long> {

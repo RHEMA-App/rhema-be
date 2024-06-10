@@ -1,7 +1,7 @@
-package controller;
+package RhemaApp.Rhema.controller;
 
-import entity.User;
-import service.UserService;
+import RhemaApp.Rhema.entity.User;
+import RhemaApp.Rhema.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

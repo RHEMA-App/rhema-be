@@ -1,4 +1,4 @@
-package dto;
+package RhemaApp.Rhema.dto;
 
 import java.util.List;
 import java.util.Date;
