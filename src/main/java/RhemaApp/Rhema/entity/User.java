@@ -1,4 +1,4 @@
-package entity;
+package RhemaApp.Rhema.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

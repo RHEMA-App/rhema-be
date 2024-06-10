@@ -1,7 +1,7 @@
-package service;
+package RhemaApp.Rhema.service;
 
-import entity.Song;
-import repository.SongRepository;
+import RhemaApp.Rhema.entity.Song;
+import RhemaApp.Rhema.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

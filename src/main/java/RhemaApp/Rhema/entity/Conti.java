@@ -1,40 +1,30 @@
-package entity;
+package RhemaApp.Rhema.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
-public class Song {
+public class Conti {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String link;
-    private String name;
+    private Date date;
+
+    @OneToMany
+    private List<Song> songs;
 
     @ManyToOne
     @JoinColumn(name = "created_by_id")
     private User created_by;
 
-    @ManyToOne
-    @JoinColumn(name = "conti_id")
-    private Conti conti;
-
-    @ManyToOne
-    //@JoinColumn(name = "key_id")
-    //private Key key;
-
     private Date created_at;
     private Date updated_at;
-
-    @Enumerated(EnumType.STRING)
-    private Section section;
-
-
 }
 

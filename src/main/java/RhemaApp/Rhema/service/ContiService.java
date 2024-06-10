@@ -1,12 +1,12 @@
-package service;
+package RhemaApp.Rhema.service;
 
-import dto.CreateContiRequestDTO;
-import entity.Conti;
-import entity.Song;
-import entity.User;
-import repository.ContiRepository;
-import repository.SongRepository;
-import repository.UserRepository;
+import RhemaApp.Rhema.dto.CreateContiRequestDTO;
+import RhemaApp.Rhema.entity.Conti;
+import RhemaApp.Rhema.entity.Song;
+import RhemaApp.Rhema.entity.User;
+import RhemaApp.Rhema.repository.ContiRepository;
+import RhemaApp.Rhema.repository.SongRepository;
+import RhemaApp.Rhema.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
