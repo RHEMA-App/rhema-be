@@ -7,6 +7,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(name="users")
 public class User {
 
     @Id
@@ -16,9 +17,9 @@ public class User {
 
     private String username;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "created_by", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Conti> conti;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "created_by", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Song> songs;
 }

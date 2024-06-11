@@ -21,7 +21,7 @@ public class Conti {
     @OneToMany(mappedBy = "conti")
     private List<Song> songs;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User created_by;
 
