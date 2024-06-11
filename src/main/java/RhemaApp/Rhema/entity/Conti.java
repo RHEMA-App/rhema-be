@@ -13,15 +13,16 @@ public class Conti {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="conti_id")
     private Long id;
 
     private Date date;
 
-    @OneToMany
+    @OneToMany(mappedBy = "conti")
     private List<Song> songs;
 
     @ManyToOne
-    @JoinColumn(name = "created_by_id")
+    @JoinColumn(name = "user_id")
     private User created_by;
 
     private Date created_at;
