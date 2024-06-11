@@ -33,6 +33,9 @@ dependencies {
 	//postgre
 	implementation 'org.postgresql:postgresql:42.2.15'
 
+	//health check
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
 }
 
 tasks.named('test') {
