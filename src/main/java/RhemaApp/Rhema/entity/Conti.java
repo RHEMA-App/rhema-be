@@ -18,11 +18,11 @@ public class Conti {
 
     private Date date;
 
-    @OneToMany
+    @OneToMany(mappedBy = "conti")
     private List<Song> songs;
 
-    @ManyToOne
-    @JoinColumn(name = "created_by_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User created_by;
 
     private Date created_at;

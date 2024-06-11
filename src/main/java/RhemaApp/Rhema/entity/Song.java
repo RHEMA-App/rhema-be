@@ -12,13 +12,14 @@ public class Song {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="song_id")
     private Long id;
 
     private String link;
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "created_by_id")
+    @JoinColumn(name = "user_id")
     private User created_by;
 
     @ManyToOne
@@ -28,6 +29,6 @@ public class Song {
     private Date created_at;
     private Date updated_at;
 
-    private Section[] section; /*없으면 null이 아닌 비어있는 Array로*/
+    //private List<Section> section;
 }
 
