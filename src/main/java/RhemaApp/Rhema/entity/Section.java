@@ -1,4 +1,4 @@
-package entity;
+package RhemaApp.Rhema.entity;
 
 public class Section {
     private String key;

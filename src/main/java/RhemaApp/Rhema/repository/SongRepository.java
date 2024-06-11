@@ -1,6 +1,6 @@
-package repository;
+package RhemaApp.Rhema.repository;
 
-import entity.Song;
+import RhemaApp.Rhema.entity.Song;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 

@@ -1,10 +1,10 @@
-package entity;
+package RhemaApp.Rhema.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -25,16 +25,9 @@ public class Song {
     @JoinColumn(name = "conti_id")
     private Conti conti;
 
-    @ManyToOne
-    //@JoinColumn(name = "key_id")
-    //private Key key;
-
     private Date created_at;
     private Date updated_at;
 
-    @Enumerated(EnumType.STRING)
-    private Section section;
-
-
+    private Section[] section; /*없으면 null이 아닌 비어있는 Array로*/
 }
 

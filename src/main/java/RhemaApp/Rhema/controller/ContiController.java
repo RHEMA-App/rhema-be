@@ -1,8 +1,8 @@
-package controller;
+package RhemaApp.Rhema.controller;
 
-import dto.CreateContiRequestDTO;
-import entity.Conti;
-import service.ContiService;
+import RhemaApp.Rhema.dto.CreateContiRequestDTO;
+import RhemaApp.Rhema.entity.Conti;
+import RhemaApp.Rhema.service.ContiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +15,11 @@ public class ContiController {
 
     @Autowired
     private ContiService contiService;
+
+    @GetMapping("/test")
+    public String test() {
+        return "test";
+    }
 
     @GetMapping("/dates")
     public List<Date> getContiDates() {
