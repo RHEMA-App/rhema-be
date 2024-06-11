@@ -13,6 +13,7 @@ public class Conti {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "conti_id")
     private Long id;
 
     private Date date;
