@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -27,7 +28,6 @@ public class Song {
     private Date created_at;
     private Date updated_at;
 
-    @Enumerated(EnumType.STRING)
-    private Section section;
+    private Section[] section; /*없으면 null이 아닌 비어있는 Array로*/
 }
 
