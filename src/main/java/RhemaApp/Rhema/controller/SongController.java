@@ -11,8 +11,11 @@ import java.util.List;
 @RequestMapping("/api/songs")
 public class SongController {
 
+    private final SongService songService;
     @Autowired
-    private SongService songService;
+    public SongController (SongService songService) {
+        this.songService = songService;
+    }
 
     @GetMapping
     public List<Song> searchSongs(@RequestParam(required = false) String query) {

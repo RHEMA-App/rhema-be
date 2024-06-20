@@ -18,14 +18,16 @@ import java.util.stream.Collectors;
 @Service
 public class ContiService {
 
-    @Autowired
-    private ContiRepository contiRepository;
+    private final ContiRepository contiRepository;
+    private final SongRepository songRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    private SongRepository songRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    public ContiService(ContiRepository contiRepository, SongRepository songRepository, UserRepository userRepository) {
+        this.contiRepository = contiRepository;
+        this.songRepository = songRepository;
+        this.userRepository = userRepository;
+    }
 
     public List<Date> getAllContiDates() {
         return contiRepository.findAll()

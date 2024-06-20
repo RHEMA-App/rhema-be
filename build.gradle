@@ -30,8 +30,10 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+
 	//postgre
 	implementation 'org.postgresql:postgresql:42.2.15'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
 	//health check
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'

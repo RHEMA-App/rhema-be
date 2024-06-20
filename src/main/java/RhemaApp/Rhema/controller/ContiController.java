@@ -13,8 +13,11 @@ import java.util.List;
 @RequestMapping("/api/conti")
 public class ContiController {
 
+    private final ContiService contiService;
     @Autowired
-    private ContiService contiService;
+    public ContiController (ContiService contiService) {
+        this.contiService = contiService;
+    }
 
     @GetMapping("/test")
     public String test() {

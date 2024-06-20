@@ -1,5 +1,6 @@
 package RhemaApp.Rhema.service;
 
+import RhemaApp.Rhema.controller.UserController;
 import RhemaApp.Rhema.entity.User;
 import RhemaApp.Rhema.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,11 @@ import java.util.Optional;
 @Service
 public class UserService {
 
+private final UserRepository userRepository;
     @Autowired
-    private UserRepository userRepository;
+    public UserService (UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
