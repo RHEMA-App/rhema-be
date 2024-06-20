@@ -17,30 +17,30 @@ public class SongController {
         this.songService = songService;
     }
 
+    //노래 조회
     @GetMapping
-    public List<Song> searchSongs(@RequestParam(required = false) String query) {
-        if (query == null) {
-            return songService.getAllSongs();
-        } else {
-            return songService.searchSongs(query);
-        }
+    public List<Song> getAllSongs() {return songService.getAllSongs();
     }
 
+    //노래 ID로 조회
     @GetMapping("/{songId}")
     public Song getSong(@PathVariable Long songId) {
         return songService.getSongById(songId);
     }
 
+    //노래 생성
     @PostMapping
     public Song createSong(@RequestBody Song song) {
         return songService.saveSong(song);
     }
 
+    //노래 업데이트
     @PatchMapping("/{songId}")
     public Song updateSong(@PathVariable Long songId, @RequestBody Song songDetails) {
         return songService.updateSong(songId, songDetails);
     }
 
+    //노래 삭제
     @DeleteMapping("/{songId}")
     public void deleteSong(@PathVariable Long songId) {
         songService.deleteSong(songId);

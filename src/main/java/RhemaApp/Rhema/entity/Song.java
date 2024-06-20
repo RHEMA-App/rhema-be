@@ -29,6 +29,7 @@ public class Song {
     private Date created_at;
     private Date updated_at;
 
-    //private List<Section> section;
+    @OneToMany(mappedBy = "song", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Section> sections;
 }
 

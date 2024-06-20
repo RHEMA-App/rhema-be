@@ -18,24 +18,24 @@ public class SongService {
         this.songRepository = songRepository;
     }
 
+    //모든 노래 조회
     public List<Song> getAllSongs() {
         return songRepository.findAll();
     }
 
-    public List<Song> searchSongs(String query) {
-        return songRepository.findByNameContaining(query);
-    }
-
+    //노래 ID로 조회
     public Song getSongById(Long songId) {
         return songRepository.findById(songId)
                 .orElseThrow(() -> new RuntimeException("조회된 정보가 없습니다."));
     }
 
+    //노래 저장
     public Song saveSong(Song song) {
         song.setCreated_at(new Date());
         return songRepository.save(song);
     }
 
+    //노래 업데이트
     public Song updateSong(Long songId, Song songDetails) {
         Song song = songRepository.findById(songId)
                 .orElseThrow(() -> new RuntimeException("조회된 정보가 없습니다."));
@@ -47,6 +47,7 @@ public class SongService {
         return songRepository.save(song);
     }
 
+    //노래 삭제
     public void deleteSong(Long songId) {
         songRepository.deleteById(songId);
     }
