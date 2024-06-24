@@ -1,8 +1,12 @@
 package RhemaApp.Rhema.controller;
 
+import RhemaApp.Rhema.dto.SongRequestDto;
+import RhemaApp.Rhema.dto.SongResponseDto;
 import RhemaApp.Rhema.entity.Song;
 import RhemaApp.Rhema.service.SongService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,8 +34,8 @@ public class SongController {
 
     //노래 생성
     @PostMapping
-    public Song createSong(@RequestBody Song song) {
-        return songService.saveSong(song);
+    public ResponseEntity<SongResponseDto> createSong(@RequestBody SongRequestDto songRequestDto) throws JsonProcessingException {
+        return ResponseEntity.ok().body(songService.saveSong(songRequestDto));
     }
 
     //노래 업데이트
