@@ -17,6 +17,7 @@ public class Song {
 
     private String link;
     private String name;
+    private String score;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
