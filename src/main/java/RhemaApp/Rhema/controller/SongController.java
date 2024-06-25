@@ -28,7 +28,7 @@ public class SongController {
         return songService.getSongById(songId);
     }
 
-    //노래 생성
+    //노래 등록
     @PostMapping
     public Song createSong(@RequestBody Song song) {
         return songService.saveSong(song);

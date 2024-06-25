@@ -1,10 +1,13 @@
 package RhemaApp.Rhema.service;
 
+import RhemaApp.Rhema.entity.Section;
 import RhemaApp.Rhema.entity.Song;
+import RhemaApp.Rhema.repository.SectionRepository;
 import RhemaApp.Rhema.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,10 +15,12 @@ import java.util.List;
 public class SongService {
 
     private final SongRepository songRepository;
+    private final SectionRepository sectionRepository;
 
     @Autowired
-    public SongService (SongRepository songRepository) {
+    public SongService (SongRepository songRepository, SectionRepository sectionRepository) {
         this.songRepository = songRepository;
+        this.sectionRepository = sectionRepository;
     }
 
     //모든 노래 조회
@@ -32,6 +37,14 @@ public class SongService {
     //노래 저장
     public Song saveSong(Song song) {
         song.setCreated_at(new Date());
+
+        List<Section> saveSection = new ArrayList<>();
+        for (Section section : song.getSections()) {
+            section.setSong(song);
+            saveSection.add(sectionRepository.save(section));
+        }
+        song.setSections(saveSection);
+
         return songRepository.save(song);
     }
 
