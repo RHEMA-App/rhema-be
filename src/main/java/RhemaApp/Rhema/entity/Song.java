@@ -1,5 +1,6 @@
 package RhemaApp.Rhema.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -31,6 +32,7 @@ public class Song {
     private Date updated_at;
 
     @OneToMany(mappedBy = "song", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Section> sections;
 }
 

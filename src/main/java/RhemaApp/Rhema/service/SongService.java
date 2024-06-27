@@ -1,9 +1,12 @@
 package RhemaApp.Rhema.service;
 
+import RhemaApp.Rhema.dto.SectionDTO;
+import RhemaApp.Rhema.dto.SongDTO;
 import RhemaApp.Rhema.entity.Section;
 import RhemaApp.Rhema.entity.Song;
 import RhemaApp.Rhema.repository.SectionRepository;
 import RhemaApp.Rhema.repository.SongRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,34 +38,63 @@ public class SongService {
     }
 
     //노래 저장
-    public Song saveSong(Song song) {
+    public Song saveSong(SongDTO songDTO) throws JsonProcessingException {
+        Song song = new Song();
+        song.setName(songDTO.getName());
+        song.setLink(songDTO.getLink());
+        song.setScore(songDTO.getScore());
+        song.setCreated_at(new Date());
         song.setCreated_at(new Date());
 
-        List<Section> saveSection = new ArrayList<>();
-        for (Section section : song.getSections()) {
+        List<Section> sections = new ArrayList<>();
+        for (SectionDTO sectionDTO : songDTO.getSections()) {
+            Section section = new Section();
+            section.setKey((sectionDTO.getKey()));
+            section.setPosition(sectionDTO.getPosition());
             section.setSong(song);
-            saveSection.add(sectionRepository.save(section));
+            sections.add(section);
         }
-        song.setSections(saveSection);
+        song.setSections(sections);
 
-        return songRepository.save(song);
+        Song saveSong = songRepository.save(song);
+        sectionRepository.saveAll(sections);
+
+        return saveSong;
     }
 
     //노래 업데이트
-    public Song updateSong(Long songId, Song songDetails) {
+    public Song updateSong(Long songId, SongDTO songDTO) throws JsonProcessingException {
         Song song = songRepository.findById(songId)
                 .orElseThrow(() -> new RuntimeException("조회된 정보가 없습니다."));
 
-        song.setName(songDetails.getName());
-        song.setLink(songDetails.getLink());
+        song.setName(songDTO.getName());
+        song.setLink(songDTO.getLink());
+        song.setScore(songDTO.getScore());
         song.setUpdated_at(new Date());
 
-        return songRepository.save(song);
+        sectionRepository.deleteBySong(song);
+        List<Section> sections = new ArrayList<>();
+        for (SectionDTO sectionDTO : songDTO.getSections()) {
+            Section section = new Section();
+            section.setKey(sectionDTO.getKey());
+            section.setPosition(sectionDTO.getPosition());
+            section.setSong(song);
+            sections.add(section);
+        }
+        song.setSections(sections);
+
+        Song updateSong = songRepository.save(song);
+        sectionRepository.saveAll(sections);
+
+        return updateSong;
     }
 
     //노래 삭제
     public void deleteSong(Long songId) {
-        songRepository.deleteById(songId);
+        Song song = songRepository.findById(songId)
+                .orElseThrow(() -> new RuntimeException("조회된 정보가 없습니다."));
+    sectionRepository.deleteBySong(song);
+    songRepository.deleteById(songId);
     }
 }
 
