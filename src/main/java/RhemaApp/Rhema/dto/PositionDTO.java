@@ -1,7 +1,10 @@
 package RhemaApp.Rhema.dto;
 
+import javax.validation.constraints.Min;
+
 public class PositionDTO {
     private int minutes;
+
     private int seconds;
 
     public int getMinutes() {

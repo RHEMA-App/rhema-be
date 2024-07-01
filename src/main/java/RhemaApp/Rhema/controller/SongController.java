@@ -32,13 +32,13 @@ public class SongController {
 
     //노래 등록
     @PostMapping
-    public Song createSong(@RequestBody SongDTO songDTO) throws JsonProcessingException {
+    public SongDTO.SongResponseDTO createSong(@RequestBody SongDTO.SongRequestDTO songDTO) throws JsonProcessingException {
         return songService.saveSong(songDTO);
     }
 
     //노래 업데이트
     @PatchMapping("/{songId}")
-    public Song updateSong(@PathVariable Long songId, @RequestBody SongDTO songDTO) throws JsonProcessingException {
+    public SongDTO.SongResponseDTO updateSong(@PathVariable Long songId, @RequestBody SongDTO.SongRequestDTO songDTO) throws JsonProcessingException {
         return songService.updateSong(songId, songDTO);
     }
 

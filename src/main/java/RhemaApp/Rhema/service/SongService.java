@@ -38,16 +38,15 @@ public class SongService {
     }
 
     //노래 저장
-    public Song saveSong(SongDTO songDTO) throws JsonProcessingException {
+    public SongDTO.SongResponseDTO saveSong(SongDTO.SongRequestDTO songRequestDTO) throws JsonProcessingException {
         Song song = new Song();
-        song.setName(songDTO.getName());
-        song.setLink(songDTO.getLink());
-        song.setScore(songDTO.getScore());
-        song.setCreated_at(new Date());
+        song.setName(songRequestDTO.getName());
+        song.setLink(songRequestDTO.getLink());
+        song.setScore(songRequestDTO.getScore());
         song.setCreated_at(new Date());
 
         List<Section> sections = new ArrayList<>();
-        for (SectionDTO sectionDTO : songDTO.getSections()) {
+        for (SectionDTO sectionDTO : songRequestDTO.getSections()) {
             Section section = new Section();
             section.setKey((sectionDTO.getKey()));
             section.setPosition(sectionDTO.getPosition());
@@ -59,22 +58,30 @@ public class SongService {
         Song saveSong = songRepository.save(song);
         sectionRepository.saveAll(sections);
 
-        return saveSong;
+        SongDTO.SongResponseDTO responseDTO = new SongDTO.SongResponseDTO();
+        responseDTO.setId(saveSong.getId());
+        responseDTO.setName(saveSong.getName());
+        responseDTO.setLink(saveSong.getLink());
+        responseDTO.setScore(saveSong.getScore());
+        responseDTO.setKey(saveSong.getKey());
+        responseDTO.setSections(songRequestDTO.getSections());
+
+        return responseDTO;
     }
 
     //노래 업데이트
-    public Song updateSong(Long songId, SongDTO songDTO) throws JsonProcessingException {
+    public SongDTO.SongResponseDTO updateSong(Long songId, SongDTO.SongRequestDTO songRequestDTO) throws JsonProcessingException {
         Song song = songRepository.findById(songId)
                 .orElseThrow(() -> new RuntimeException("조회된 정보가 없습니다."));
 
-        song.setName(songDTO.getName());
-        song.setLink(songDTO.getLink());
-        song.setScore(songDTO.getScore());
+        song.setName(songRequestDTO.getName());
+        song.setLink(songRequestDTO.getLink());
+        song.setScore(songRequestDTO.getScore());
         song.setUpdated_at(new Date());
 
         sectionRepository.deleteBySong(song);
         List<Section> sections = new ArrayList<>();
-        for (SectionDTO sectionDTO : songDTO.getSections()) {
+        for (SectionDTO sectionDTO : songRequestDTO.getSections()) {
             Section section = new Section();
             section.setKey(sectionDTO.getKey());
             section.setPosition(sectionDTO.getPosition());
@@ -86,7 +93,15 @@ public class SongService {
         Song updateSong = songRepository.save(song);
         sectionRepository.saveAll(sections);
 
-        return updateSong;
+        SongDTO.SongResponseDTO responseDTO = new SongDTO.SongResponseDTO();
+        responseDTO.setId(updateSong.getId());
+        responseDTO.setName(updateSong.getName());
+        responseDTO.setLink(updateSong.getLink());
+        responseDTO.setScore(updateSong.getScore());
+        responseDTO.setKey(updateSong.getKey());
+        responseDTO.setSections(songRequestDTO.getSections());
+
+        return responseDTO;
     }
 
     //노래 삭제

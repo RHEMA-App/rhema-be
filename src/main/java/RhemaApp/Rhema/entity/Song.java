@@ -15,10 +15,10 @@ public class Song {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="song_id")
     private Long id;
-
     private String link;
     private String name;
     private String score;
+    private String key;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
