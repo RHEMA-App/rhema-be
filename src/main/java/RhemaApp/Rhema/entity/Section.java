@@ -1,5 +1,6 @@
 package RhemaApp.Rhema.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
@@ -22,6 +23,7 @@ public class Section {
 
     @ManyToOne
     @JoinColumn(name = "song_id")
+    @JsonBackReference
     private Song song;
 
     // Position 객체 -> JSON 문자열 변환
