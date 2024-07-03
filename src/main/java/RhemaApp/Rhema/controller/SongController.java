@@ -1,12 +1,14 @@
 package RhemaApp.Rhema.controller;
 
-import RhemaApp.Rhema.dto.SongDTO;
+import RhemaApp.Rhema.dto.SongRequestDTO;
+import RhemaApp.Rhema.dto.SongResponseDTO;
 import RhemaApp.Rhema.entity.Song;
 import RhemaApp.Rhema.service.SongService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -32,14 +34,14 @@ public class SongController {
 
     //노래 등록
     @PostMapping
-    public SongDTO.SongResponseDTO createSong(@RequestBody SongDTO.SongRequestDTO songDTO) throws JsonProcessingException {
+    public SongResponseDTO createSong(@RequestBody @Valid SongRequestDTO songDTO) throws JsonProcessingException {
         return songService.saveSong(songDTO);
     }
 
     //노래 업데이트
     @PatchMapping("/{songId}")
-    public SongDTO.SongResponseDTO updateSong(@PathVariable Long songId, @RequestBody SongDTO.SongRequestDTO songDTO) throws JsonProcessingException {
-        return songService.updateSong(songId, songDTO);
+    public SongResponseDTO updateSong(@PathVariable Long songId, @RequestBody @Valid SongRequestDTO songRequestDTO) throws JsonProcessingException {
+        return songService.updateSong(songId, songRequestDTO);
     }
 
     //노래 삭제

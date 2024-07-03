@@ -1,12 +1,14 @@
 package RhemaApp.Rhema.service;
 
 import RhemaApp.Rhema.dto.SectionDTO;
-import RhemaApp.Rhema.dto.SongDTO;
+import RhemaApp.Rhema.dto.SongRequestDTO;
+import RhemaApp.Rhema.dto.SongResponseDTO;
 import RhemaApp.Rhema.entity.Section;
 import RhemaApp.Rhema.entity.Song;
 import RhemaApp.Rhema.repository.SectionRepository;
 import RhemaApp.Rhema.repository.SongRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,17 +40,18 @@ public class SongService {
     }
 
     //노래 저장
-    public SongDTO.SongResponseDTO saveSong(SongDTO.SongRequestDTO songRequestDTO) throws JsonProcessingException {
+    public SongResponseDTO saveSong(SongRequestDTO songRequestDTO) throws JsonProcessingException {
         Song song = new Song();
         song.setName(songRequestDTO.getName());
         song.setLink(songRequestDTO.getLink());
         song.setScore(songRequestDTO.getScore());
+        song.setKey(songRequestDTO.getKey());
         song.setCreated_at(new Date());
 
         List<Section> sections = new ArrayList<>();
         for (SectionDTO sectionDTO : songRequestDTO.getSections()) {
             Section section = new Section();
-            section.setKey((sectionDTO.getKey()));
+            section.setKey(sectionDTO.getKey());
             section.setPosition(sectionDTO.getPosition());
             section.setSong(song);
             sections.add(section);
@@ -58,28 +61,33 @@ public class SongService {
         Song saveSong = songRepository.save(song);
         sectionRepository.saveAll(sections);
 
-        SongDTO.SongResponseDTO responseDTO = new SongDTO.SongResponseDTO();
-        responseDTO.setId(saveSong.getId());
-        responseDTO.setName(saveSong.getName());
-        responseDTO.setLink(saveSong.getLink());
-        responseDTO.setScore(saveSong.getScore());
-        responseDTO.setKey(saveSong.getKey());
-        responseDTO.setSections(songRequestDTO.getSections());
+//        SongResponseDTO responseDTO = new SongResponseDTO(saveSong, songRequestDTO.getSections());
+//        responseDTO.setId(saveSong.getId());
+//        responseDTO.setName(saveSong.getName());
+//        responseDTO.setLink(saveSong.getLink());
+//        responseDTO.setScore(saveSong.getScore());
+//        responseDTO.setKey(saveSong.getKey());
+//        responseDTO.setSections(songRequestDTO.getSections());
+
+        SongResponseDTO responseDTO = new SongResponseDTO(saveSong, songRequestDTO.getSections());
 
         return responseDTO;
     }
 
     //노래 업데이트
-    public SongDTO.SongResponseDTO updateSong(Long songId, SongDTO.SongRequestDTO songRequestDTO) throws JsonProcessingException {
+    @Transactional
+    public SongResponseDTO updateSong(Long songId, SongRequestDTO songRequestDTO) throws JsonProcessingException {
         Song song = songRepository.findById(songId)
                 .orElseThrow(() -> new RuntimeException("조회된 정보가 없습니다."));
+
+        sectionRepository.deleteBySong(song);
 
         song.setName(songRequestDTO.getName());
         song.setLink(songRequestDTO.getLink());
         song.setScore(songRequestDTO.getScore());
+        song.setKey(songRequestDTO.getKey());
         song.setUpdated_at(new Date());
 
-        sectionRepository.deleteBySong(song);
         List<Section> sections = new ArrayList<>();
         for (SectionDTO sectionDTO : songRequestDTO.getSections()) {
             Section section = new Section();
@@ -93,15 +101,9 @@ public class SongService {
         Song updateSong = songRepository.save(song);
         sectionRepository.saveAll(sections);
 
-        SongDTO.SongResponseDTO responseDTO = new SongDTO.SongResponseDTO();
-        responseDTO.setId(updateSong.getId());
-        responseDTO.setName(updateSong.getName());
-        responseDTO.setLink(updateSong.getLink());
-        responseDTO.setScore(updateSong.getScore());
-        responseDTO.setKey(updateSong.getKey());
-        responseDTO.setSections(songRequestDTO.getSections());
 
-        return responseDTO;
+        return new SongResponseDTO(updateSong, songRequestDTO.getSections());
+
     }
 
     //노래 삭제
