@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,7 +25,7 @@ public class SongService {
     private final SectionRepository sectionRepository;
 
     @Autowired
-    public SongService (SongRepository songRepository, SectionRepository sectionRepository) {
+    public SongService(SongRepository songRepository, SectionRepository sectionRepository) {
         this.songRepository = songRepository;
         this.sectionRepository = sectionRepository;
     }
@@ -80,11 +81,10 @@ public class SongService {
 
     //노래 업데이트
     @Transactional
-    public SongResponseDTO updateSong(Long songId, SongRequestDTO songRequestDTO) throws JsonProcessingException {
+    public SongResponseDTO updateSong( Long songId, SongRequestDTO songRequestDTO) throws JsonProcessingException {
         Song song = songRepository.findById(songId)
                 .orElseThrow(() -> new RuntimeException("조회된 정보가 없습니다."));
 
-        sectionRepository.deleteBySong(song);
 
         song.setName(songRequestDTO.getName());
         song.setLink(songRequestDTO.getLink());
@@ -92,34 +92,44 @@ public class SongService {
         song.setKey(songRequestDTO.getKey());
         song.setUpdated_at(new Date());
 
-        List<Section> sections = new ArrayList<>();
+        List<Section> existingSections = song.getSections();
+//        List<SectionDTO> newSections = songRequestDTO.getSections();
+
         for (SectionDTO sectionDTO : songRequestDTO.getSections()) {
-            Section section = new Section();
-            section.setKey(sectionDTO.getKey());
-            Position position = new Position();
-            position.setMinutes(sectionDTO.getPosition().getMinutes());
-            position.setSeconds(sectionDTO.getPosition().getSeconds());
-            section.setPosition(position);
-            section.setSong(song);
-            sections.add(section);
+            for (Section existingSection : existingSections) {
+                if (existingSection.getKey().equals(sectionDTO.getKey())) {
+                    Position position = existingSection.getPosition();
+                    if (position == null) {
+                        position = new Position();
+                        existingSection.setPosition(position);
+                    }
+                    position.setMinutes(sectionDTO.getPosition().getMinutes());
+                    position.setSeconds(sectionDTO.getPosition().getSeconds());
+
+                    // section.setPosition(position);
+                    //section.setSong(song);
+
+                    //if (section.getId() == null) {
+                    //  existingSections.add(section);
+                }
+            }
         }
-        song.setSections(sections);
-
-        Song updateSong = songRepository.save(song);
-        sectionRepository.saveAll(sections);
 
 
-        return new SongResponseDTO(updateSong, songRequestDTO.getSections());
+            songRepository.save(song);
+            sectionRepository.saveAll(existingSections);
 
+        return new SongResponseDTO(song, songRequestDTO.getSections());
     }
 
-    //노래 삭제
-    public void deleteSong(Long songId) {
-        Song song = songRepository.findById(songId)
-                .orElseThrow(() -> new RuntimeException("조회된 정보가 없습니다."));
-    sectionRepository.deleteBySong(song);
-    songRepository.deleteById(songId);
-    }
-}
 
+        //노래 삭제
+        public void deleteSong (Long songId){
+            Song song = songRepository.findById(songId)
+                    .orElseThrow(() -> new RuntimeException("조회된 정보가 없습니다."));
+
+            sectionRepository.deleteBySong(song);
+            songRepository.deleteById(songId);
+        }
+    }
 

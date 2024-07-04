@@ -40,7 +40,7 @@ public class SongController {
 
     //노래 업데이트
     @PatchMapping("/{songId}")
-    public SongResponseDTO updateSong(@PathVariable Long songId, @RequestBody @Valid SongRequestDTO songRequestDTO) throws JsonProcessingException {
+    public SongResponseDTO updateSong(@PathVariable("songId") Long songId, @RequestBody @Valid SongRequestDTO songRequestDTO) throws JsonProcessingException {
         return songService.updateSong(songId, songRequestDTO);
     }
 
