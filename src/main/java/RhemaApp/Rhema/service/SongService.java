@@ -3,6 +3,7 @@ package RhemaApp.Rhema.service;
 import RhemaApp.Rhema.dto.SectionDTO;
 import RhemaApp.Rhema.dto.SongRequestDTO;
 import RhemaApp.Rhema.dto.SongResponseDTO;
+import RhemaApp.Rhema.entity.Position;
 import RhemaApp.Rhema.entity.Section;
 import RhemaApp.Rhema.entity.Song;
 import RhemaApp.Rhema.repository.SectionRepository;
@@ -52,7 +53,10 @@ public class SongService {
         for (SectionDTO sectionDTO : songRequestDTO.getSections()) {
             Section section = new Section();
             section.setKey(sectionDTO.getKey());
-            section.setPosition(sectionDTO.getPosition());
+            Position position = new Position();
+            position.setMinutes(sectionDTO.getPosition().getMinutes());
+            position.setSeconds(sectionDTO.getPosition().getSeconds());
+            section.setPosition(position);
             section.setSong(song);
             sections.add(section);
         }
@@ -92,7 +96,10 @@ public class SongService {
         for (SectionDTO sectionDTO : songRequestDTO.getSections()) {
             Section section = new Section();
             section.setKey(sectionDTO.getKey());
-            section.setPosition(sectionDTO.getPosition());
+            Position position = new Position();
+            position.setMinutes(sectionDTO.getPosition().getMinutes());
+            position.setSeconds(sectionDTO.getPosition().getSeconds());
+            section.setPosition(position);
             section.setSong(song);
             sections.add(section);
         }
