@@ -124,12 +124,15 @@ public class SongService {
 
 
         //노래 삭제
-        public void deleteSong (Long songId){
+    @Transactional
+        public String deleteSong (Long songId){
             Song song = songRepository.findById(songId)
                     .orElseThrow(() -> new RuntimeException("조회된 정보가 없습니다."));
 
             sectionRepository.deleteBySong(song);
             songRepository.deleteById(songId);
+            return "노래가 성공적으로 삭제되었습니다.";
         }
+
     }
 

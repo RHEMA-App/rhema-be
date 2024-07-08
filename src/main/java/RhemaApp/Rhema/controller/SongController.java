@@ -46,7 +46,8 @@ public class SongController {
 
     //노래 삭제
     @DeleteMapping("/{songId}")
-    public void deleteSong(@PathVariable Long songId) {
-        songService.deleteSong(songId);
+    public String deleteSong(@PathVariable("songId") Long songId) {
+        return songService.deleteSong(songId);
+
     }
 }
