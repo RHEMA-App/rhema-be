@@ -1,4 +1,4 @@
-package RhemaApp.Rhema.Global.s3;
+package RhemaApp.Rhema.global.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.Headers;

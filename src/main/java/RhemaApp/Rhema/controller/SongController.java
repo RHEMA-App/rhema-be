@@ -1,6 +1,6 @@
 package RhemaApp.Rhema.controller;
 
-import RhemaApp.Rhema.Global.s3.S3FileService;
+import RhemaApp.Rhema.global.s3.S3FileService;
 import RhemaApp.Rhema.dto.SongRequestDTO;
 import RhemaApp.Rhema.dto.SongResponseDTO;
 import RhemaApp.Rhema.entity.Song;
