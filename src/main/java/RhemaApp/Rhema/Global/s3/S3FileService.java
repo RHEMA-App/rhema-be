@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.Headers;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,12 +17,13 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class FileService {
+public class S3FileService {
     @Value("${cloud.s3.bucket}")
     private String bucket;
 
     private final AmazonS3 amazonS3;
 
+    @Transactional
     public Map<String, String> getPresignedUrl(String prefix, String fileName) {
         if (!prefix.isEmpty()) {
             fileName = createPath(prefix, fileName);
@@ -30,7 +32,7 @@ public class FileService {
         GeneratePresignedUrlRequest generatePresignedUrlRequest = getGeneratePresignedUrlRequest(bucket, fileName);
         URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
 
-        return Map.of("presigned-url", url.toString());
+        return Map.of("ok", "true", "presignedUrl", url.toString());
     }
 
     private GeneratePresignedUrlRequest getGeneratePresignedUrlRequest(String bucket, String fileName) {
