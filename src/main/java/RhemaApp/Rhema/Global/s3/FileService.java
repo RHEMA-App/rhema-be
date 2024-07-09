@@ -30,8 +30,7 @@ public class FileService {
         GeneratePresignedUrlRequest generatePresignedUrlRequest = getGeneratePresignedUrlRequest(bucket, fileName);
         URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
 
-        return Map.of("presigned-url", url.toString(),
-                "s3-url", "s3://rhema-bucket/"+generatePresignedUrlRequest.getKey());
+        return Map.of("presigned-url", url.toString());
     }
 
     private GeneratePresignedUrlRequest getGeneratePresignedUrlRequest(String bucket, String fileName) {

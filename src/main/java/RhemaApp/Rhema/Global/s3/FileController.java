@@ -13,9 +13,9 @@ public class FileController {
 
     private final FileService fileService;
 
-    @GetMapping("/api/v1/file/presigned-url/{fileName}")
+    @GetMapping("/api/s3/score/{fileName}")
     public Map<String, String> getPresignedUrl(
             @PathVariable(name = "fileName") String fileName) {
-        return fileService.getPresignedUrl("images", fileName);
+        return fileService.getPresignedUrl("scores", fileName);
     }
 }

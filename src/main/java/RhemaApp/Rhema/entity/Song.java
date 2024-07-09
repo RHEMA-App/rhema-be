@@ -19,14 +19,15 @@ public class Song {
     private Long id;
     private String link;
     private String name;
+    @Column(columnDefinition = "TEXT")
     private String score;
     private String key;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User created_by;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "conti_id")
     private Conti conti;
 
