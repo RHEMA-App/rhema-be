@@ -30,6 +30,7 @@ public class Section {
     public void setPosition(Position position) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         this.positionJson = mapper.writeValueAsString(position);
+        System.out.println("positionJson : " + positionJson);
     }
 
     // JSON 문자열 -> Position 객체 변환

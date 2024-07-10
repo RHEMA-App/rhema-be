@@ -56,7 +56,9 @@ public class SongService {
             section.setKey(sectionDTO.getKey());
             Position position = new Position();
             position.setMinutes(sectionDTO.getPosition().getMinutes());
+            System.out.println("sectionDTO.getPosition().getMinutes(): " + sectionDTO.getPosition().getMinutes());
             position.setSeconds(sectionDTO.getPosition().getSeconds());
+            System.out.println("sectionDTO.getPosition().getSeconds(): " + sectionDTO.getPosition().getSeconds());
             section.setPosition(position);
             section.setSong(song);
             sections.add(section);
