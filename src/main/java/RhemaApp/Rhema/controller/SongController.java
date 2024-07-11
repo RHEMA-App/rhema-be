@@ -21,10 +21,17 @@ public class SongController {
         this.songService = songService;
     }
 
-    //노래 조회
+    //전체 노래 조회 + 키워드 조회
     @GetMapping
-    public List<Song> getAllSongs() {return songService.getAllSongs();
+    public List<SongResponseDTO> getAllSongs(@RequestParam (required = false) String keyword) throws JsonProcessingException {
+        if (keyword == null || keyword.isEmpty()) {
+            return songService.getAllSongs();
+        }
+        else {
+            return songService.searchSongs(keyword);
+        }
     }
+
 
     //노래 ID로 조회
     @GetMapping("/{songId}")

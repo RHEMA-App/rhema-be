@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
@@ -30,9 +31,24 @@ public class SongService {
         this.sectionRepository = sectionRepository;
     }
 
-    //모든 노래 조회
-    public List<Song> getAllSongs() {
-        return songRepository.findAll();
+    //전체 노래 조회
+    public List<SongResponseDTO> getAllSongs() throws JsonProcessingException {
+        List<Song> songs = songRepository.findAll();
+        List<SongResponseDTO> songResponseDTOs = new ArrayList<>();
+        for (Song song : songs) {
+            songResponseDTOs.add(toResponseDTO(song));
+        }
+        return songResponseDTOs;
+    }
+
+    //키워드 노래 조회
+    public List<SongResponseDTO> searchSongs(String keyword) throws JsonProcessingException {
+        List<Song> songs = songRepository.findByNameContaining(keyword);
+        List<SongResponseDTO> songResponseDTOs = new ArrayList<>();
+        for (Song song : songs) {
+            songResponseDTOs.add(toResponseDTO(song));
+        }
+        return songResponseDTOs;
     }
 
     //노래 ID로 조회
@@ -40,6 +56,20 @@ public class SongService {
         return songRepository.findById(songId)
                 .orElseThrow(() -> new RuntimeException("조회된 정보가 없습니다."));
     }
+
+    private SongResponseDTO toResponseDTO(Song song) throws JsonProcessingException {
+        List<SectionDTO> sectionDTOs = new ArrayList<>();
+        for (Section section : song.getSections()) {
+            SectionDTO sectionDTO = new SectionDTO();
+            sectionDTO.setKey(section.getKey());
+            sectionDTO.setPosition(section.getPosition());
+            sectionDTOs.add(sectionDTO);
+        }
+        return new SongResponseDTO(song, sectionDTOs);
+    }
+
+
+
 
     //노래 저장
     public SongResponseDTO saveSong(SongRequestDTO songRequestDTO) throws JsonProcessingException {
