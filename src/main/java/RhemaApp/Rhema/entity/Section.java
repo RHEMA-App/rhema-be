@@ -28,8 +28,12 @@ public class Section {
 
     // Position 객체 -> JSON 문자열 변환
     public void setPosition(Position position) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        this.positionJson = mapper.writeValueAsString(position);
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            this.positionJson = mapper.writeValueAsString(position);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
     // JSON 문자열 -> Position 객체 변환

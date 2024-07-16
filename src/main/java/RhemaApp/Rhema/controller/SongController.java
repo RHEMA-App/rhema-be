@@ -1,5 +1,6 @@
 package RhemaApp.Rhema.controller;
 
+import RhemaApp.Rhema.dto.ResponseDTO;
 import RhemaApp.Rhema.dto.SongRequestDTO;
 import RhemaApp.Rhema.dto.SongResponseDTO;
 import RhemaApp.Rhema.entity.Song;
@@ -15,7 +16,7 @@ import java.util.List;
 @RequestMapping("/api/songs")
 public class SongController {
 
-    private final SongService songService;
+    private SongService songService;
     @Autowired
     public SongController (SongService songService) {
         this.songService = songService;
@@ -23,7 +24,7 @@ public class SongController {
 
     //전체 노래 조회 + 키워드 조회
     @GetMapping
-    public List<SongResponseDTO> getAllSongs(@RequestParam (required = false) String keyword) throws JsonProcessingException {
+    public ResponseDTO<List<SongResponseDTO>> getAllSongs(@RequestParam (name = "keyword", required = false) String keyword) throws JsonProcessingException {
         if (keyword == null || keyword.isEmpty()) {
             return songService.getAllSongs();
         }
@@ -53,8 +54,12 @@ public class SongController {
 
     //노래 삭제
     @DeleteMapping("/{songId}")
-    public String deleteSong(@PathVariable("songId") Long songId) {
-        return songService.deleteSong(songId);
-
+    public ResponseDTO<String> deleteSong(@PathVariable("songId") Long songId) {
+        try {
+            songService.deleteSong(songId);
+            return ResponseDTO.success("노래가 성공적으로 삭제되었습니다.");
+        } catch (RuntimeException e) {
+            return ResponseDTO.error("노래 삭제 중 오류가 발생하였습니다.");
+        }
     }
 }

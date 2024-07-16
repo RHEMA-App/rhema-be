@@ -1,5 +1,6 @@
 package RhemaApp.Rhema.service;
 
+import RhemaApp.Rhema.dto.ResponseDTO;
 import RhemaApp.Rhema.dto.SectionDTO;
 import RhemaApp.Rhema.dto.SongRequestDTO;
 import RhemaApp.Rhema.dto.SongResponseDTO;
@@ -22,33 +23,25 @@ import java.util.List;
 @Service
 public class SongService {
 
+    @Autowired
     private final SongRepository songRepository;
     private final SectionRepository sectionRepository;
 
-    @Autowired
     public SongService(SongRepository songRepository, SectionRepository sectionRepository) {
         this.songRepository = songRepository;
         this.sectionRepository = sectionRepository;
     }
 
     //전체 노래 조회
-    public List<SongResponseDTO> getAllSongs() throws JsonProcessingException {
+    public ResponseDTO<List<SongResponseDTO>> getAllSongs() throws JsonProcessingException {
         List<Song> songs = songRepository.findAll();
-        List<SongResponseDTO> songResponseDTOs = new ArrayList<>();
-        for (Song song : songs) {
-            songResponseDTOs.add(toResponseDTO(song));
-        }
-        return songResponseDTOs;
+        return createResponseDTO(songs);
     }
 
     //키워드 노래 조회
-    public List<SongResponseDTO> searchSongs(String keyword) throws JsonProcessingException {
+    public ResponseDTO<List<SongResponseDTO>> searchSongs(String keyword) throws JsonProcessingException {
         List<Song> songs = songRepository.findByNameContaining(keyword);
-        List<SongResponseDTO> songResponseDTOs = new ArrayList<>();
-        for (Song song : songs) {
-            songResponseDTOs.add(toResponseDTO(song));
-        }
-        return songResponseDTOs;
+        return createResponseDTO(songs);
     }
 
     //노래 ID로 조회
@@ -57,15 +50,17 @@ public class SongService {
                 .orElseThrow(() -> new RuntimeException("조회된 정보가 없습니다."));
     }
 
-    private SongResponseDTO toResponseDTO(Song song) throws JsonProcessingException {
-        List<SectionDTO> sectionDTOs = new ArrayList<>();
-        for (Section section : song.getSections()) {
-            SectionDTO sectionDTO = new SectionDTO();
-            sectionDTO.setKey(section.getKey());
-            sectionDTO.setPosition(section.getPosition());
-            sectionDTOs.add(sectionDTO);
+    private ResponseDTO<List<SongResponseDTO>> createResponseDTO(List<Song> songs) {
+        List<SongResponseDTO> songResponseDTOs = new ArrayList<>();
+        for (Song song : songs) {
+            List<SectionDTO> sections = new ArrayList<>();
+            songResponseDTOs.add(toResponseDTO(song, sections));
         }
-        return new SongResponseDTO(song, sectionDTOs);
+        return ResponseDTO.success(songResponseDTOs);
+    }
+
+    private SongResponseDTO toResponseDTO(Song song, List<SectionDTO> sections) {
+        return new SongResponseDTO(song, sections);
     }
 
 
@@ -96,13 +91,6 @@ public class SongService {
         Song saveSong = songRepository.save(song);
         sectionRepository.saveAll(sections);
 
-//        SongResponseDTO responseDTO = new SongResponseDTO(saveSong, songRequestDTO.getSections());
-//        responseDTO.setId(saveSong.getId());
-//        responseDTO.setName(saveSong.getName());
-//        responseDTO.setLink(saveSong.getLink());
-//        responseDTO.setScore(saveSong.getScore());
-//        responseDTO.setKey(saveSong.getKey());
-//        responseDTO.setSections(songRequestDTO.getSections());
 
         SongResponseDTO responseDTO = new SongResponseDTO(saveSong, songRequestDTO.getSections());
 
