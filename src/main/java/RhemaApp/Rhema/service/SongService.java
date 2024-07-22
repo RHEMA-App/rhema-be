@@ -13,8 +13,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,18 +31,21 @@ public class SongService {
     }
 
     //전체 노래 조회
+    @Transactional
     public ResponseDTO<List<SongResponseDTO>> getAllSongs() throws JsonProcessingException {
         List<Song> songs = songRepository.findAll();
         return createResponseDTO(songs);
     }
 
     //키워드 노래 조회
+    @Transactional
     public ResponseDTO<List<SongResponseDTO>> searchSongs(String keyword) throws JsonProcessingException {
         List<Song> songs = songRepository.findByNameContaining(keyword);
         return createResponseDTO(songs);
     }
 
     //노래 ID로 조회
+    @Transactional
     public Song getSongById(Long songId) {
         return songRepository.findById(songId)
                 .orElseThrow(() -> new RuntimeException("조회된 정보가 없습니다."));
@@ -54,13 +55,13 @@ public class SongService {
         List<SongResponseDTO> songResponseDTOs = new ArrayList<>();
         for (Song song : songs) {
             List<SectionDTO> sections = new ArrayList<>();
-            songResponseDTOs.add(toResponseDTO(song, sections));
+            songResponseDTOs.add(new SongResponseDTO(song));
         }
         return ResponseDTO.success(songResponseDTOs);
     }
 
     private SongResponseDTO toResponseDTO(Song song, List<SectionDTO> sections) {
-        return new SongResponseDTO(song, sections);
+        return new SongResponseDTO(song);
     }
 
 
@@ -92,7 +93,7 @@ public class SongService {
         sectionRepository.saveAll(sections);
 
 
-        SongResponseDTO responseDTO = new SongResponseDTO(saveSong, songRequestDTO.getSections());
+        SongResponseDTO responseDTO = new SongResponseDTO(saveSong);
 
         return responseDTO;
     }
@@ -137,7 +138,7 @@ public class SongService {
             songRepository.save(song);
             sectionRepository.saveAll(existingSections);
 
-        return new SongResponseDTO(song, songRequestDTO.getSections());
+        return new SongResponseDTO(song);
     }
 
 

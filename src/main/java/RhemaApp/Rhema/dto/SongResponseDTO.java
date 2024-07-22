@@ -16,17 +16,21 @@ public class SongResponseDTO {
     private List<SectionDTO> sections;
 
     //생성자
-    public SongResponseDTO(Song song, List<SectionDTO> sections) {
+    public SongResponseDTO(Song song) {
         this.id = song.getId();
         this.name = song.getName();
         this.link = song.getLink();
         this.score = song.getScore();
         this.key = song.getKey();
         this.sections = new ArrayList<>();
-        for (SectionDTO section : sections) {
+        for (Section section : song.getSections()) {
         SectionDTO sectionDTO = new SectionDTO();
         sectionDTO.setKey(section.getKey());
-        sectionDTO.setPosition(section.getPosition());
+        try {
+        sectionDTO.setPosition(section.getPosition());}
+        catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         this.sections.add(sectionDTO);
     }
 

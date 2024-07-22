@@ -42,6 +42,11 @@ public class Section {
             return null;
         }
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(this.positionJson, Position.class);
+        try {
+            return mapper.readValue(this.positionJson, Position.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
