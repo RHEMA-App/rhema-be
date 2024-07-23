@@ -18,8 +18,8 @@ public class Conti {
 
     private Date date;
 
-    @OneToMany(mappedBy = "conti")
-    private List<Song> songs;
+    @OneToMany(mappedBy = "conti", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ContiSong> contiSongs;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

@@ -29,6 +29,7 @@ public class ContiController {
             return ResponseDTO.error("콘티 생성 실패 : " + e.getMessage());
         }
     }
+
     @PatchMapping("/conti")
     public Conti updateConti(@RequestBody CreateContiRequestDTO request) {
         return contiService.updateConti(request);

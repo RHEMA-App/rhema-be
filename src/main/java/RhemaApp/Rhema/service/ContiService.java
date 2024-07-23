@@ -2,9 +2,11 @@ package RhemaApp.Rhema.service;
 
 import RhemaApp.Rhema.dto.CreateContiRequestDTO;
 import RhemaApp.Rhema.entity.Conti;
+import RhemaApp.Rhema.entity.ContiSong;
 import RhemaApp.Rhema.entity.Song;
 import RhemaApp.Rhema.entity.User;
 import RhemaApp.Rhema.repository.ContiRepository;
+import RhemaApp.Rhema.repository.ContiSongRepository;
 import RhemaApp.Rhema.repository.SongRepository;
 import RhemaApp.Rhema.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +23,14 @@ public class ContiService {
     private final ContiRepository contiRepository;
     private final SongRepository songRepository;
     private final UserRepository userRepository;
+    private final ContiSongRepository contiSongRepository;
 
     @Autowired
-    public ContiService(ContiRepository contiRepository, SongRepository songRepository, UserRepository userRepository) {
+    public ContiService(ContiRepository contiRepository, SongRepository songRepository, UserRepository userRepository, ContiSongRepository contiSongRepository) {
         this.contiRepository = contiRepository;
         this.songRepository = songRepository;
         this.userRepository = userRepository;
+        this.contiSongRepository = contiSongRepository;
     }
 
     public List<Date> getAllContiDates() {
@@ -40,26 +44,30 @@ public class ContiService {
         Conti conti = new Conti();
         conti.setDate(request.getDate());
 
-        List<Song> songs = songRepository.findAllById(request.getSongIds());
-        conti.setSongs(songs);
-
         Optional<User> createdBy = userRepository.findById(request.getCreatedBy());
         createdBy.ifPresent(conti::setCreated_by);
 
         conti.setCreated_at(new Date());
         conti.setUpdated_at(new Date());
+        Conti savedConti = contiRepository.save(conti);
 
+        List<Song> songs = songRepository.findAllById(request.getSongIds());
+        for (Song song : songs) {
+            ContiSong contiSong = new ContiSong();
+            contiSong.setConti(savedConti);
+            contiSong.setSong(song);
+            contiSongRepository.save(contiSong);
+        }
 
-        return contiRepository.save(conti);
+        return savedConti;
     }
 
     public Conti updateConti(CreateContiRequestDTO request) {
         Conti conti = contiRepository.findById(request.getCreatedBy())
-                .orElseThrow(() -> new RuntimeException("Conti not found"));
+                .orElseThrow(() -> new RuntimeException("해당 콘티를 발견할 수 없습니다."));
 
         conti.setDate(request.getDate());
         List<Song> songs = songRepository.findAllById(request.getSongIds());
-        conti.setSongs(songs);
         conti.setUpdated_at(new Date());
 
         return contiRepository.save(conti);

@@ -30,7 +30,8 @@ public class ContiSong {
         this.id = id;
     }
 
-    public void setConti() {
+    
+    public void setConti(Conti conti) {
         this.conti = conti;
     }
 
