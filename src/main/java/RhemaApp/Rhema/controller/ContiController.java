@@ -1,6 +1,7 @@
 package RhemaApp.Rhema.controller;
 
 import RhemaApp.Rhema.dto.CreateContiRequestDTO;
+import RhemaApp.Rhema.dto.ResponseDTO;
 import RhemaApp.Rhema.entity.Conti;
 import RhemaApp.Rhema.service.ContiService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,21 +20,15 @@ public class ContiController {
         this.contiService = contiService;
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "test";
+    @PostMapping
+    public ResponseDTO<String> createConti(@RequestBody CreateContiRequestDTO request) {
+        try {
+            Conti conti = contiService.saveConti(request);
+            return ResponseDTO.success("콘티가 성공적으로 생성되었습니다.");
+        } catch (Exception e) {
+            return ResponseDTO.error("콘티 생성 실패 : " + e.getMessage());
+        }
     }
-
-    @GetMapping("/dates")
-    public List<Date> getContiDates() {
-        return contiService.getAllContiDates();
-    }
-
-    @PostMapping("/conti")
-    public Conti createConti(@RequestBody CreateContiRequestDTO request) {
-        return contiService.saveConti(request);
-    }
-
     @PatchMapping("/conti")
     public Conti updateConti(@RequestBody CreateContiRequestDTO request) {
         return contiService.updateConti(request);

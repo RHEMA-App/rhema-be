@@ -5,8 +5,8 @@ import java.util.Date;
 
 public class CreateContiRequestDTO {
 
-    private Date date;
-    private List<Long> songIds;
+    private Date date;  //콘티 날짜
+    private List<Long> songIds;     //곡의 id 목록
     private Long createdBy;
 
     public Date getDate() {
