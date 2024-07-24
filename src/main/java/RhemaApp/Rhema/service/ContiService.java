@@ -49,17 +49,17 @@ public class ContiService {
 
         conti.setCreated_at(new Date());
         conti.setUpdated_at(new Date());
-        Conti savedConti = contiRepository.save(conti);
+       // Conti savedConti = contiRepository.save(conti);
 
         List<Song> songs = songRepository.findAllById(request.getSongIds());
         for (Song song : songs) {
             ContiSong contiSong = new ContiSong();
-            contiSong.setConti(savedConti);
             contiSong.setSong(song);
-            contiSongRepository.save(contiSong);
+            conti.addContiSong(contiSong);
+            //contiSongRepository.save(contiSong);
         }
 
-        return savedConti;
+        return contiRepository.save(conti);
     }
 
     public Conti updateConti(CreateContiRequestDTO request) {
