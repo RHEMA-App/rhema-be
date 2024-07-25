@@ -112,7 +112,6 @@ public class SongService {
         song.setUpdated_at(new Date());
 
         List<Section> existingSections = song.getSections();
-//        List<SectionDTO> newSections = songRequestDTO.getSections();
 
         for (SectionDTO sectionDTO : songRequestDTO.getSections()) {
             for (Section existingSection : existingSections) {
@@ -124,17 +123,9 @@ public class SongService {
                     }
                     position.setMinutes(sectionDTO.getPosition().getMinutes());
                     position.setSeconds(sectionDTO.getPosition().getSeconds());
-
-                    // section.setPosition(position);
-                    //section.setSong(song);
-
-                    //if (section.getId() == null) {
-                    //  existingSections.add(section);
                 }
             }
         }
-
-
             songRepository.save(song);
             sectionRepository.saveAll(existingSections);
 
@@ -142,7 +133,7 @@ public class SongService {
     }
 
 
-        //노래 삭제
+    //노래 삭제
     @Transactional
         public String deleteSong (Long songId){
             Song song = songRepository.findById(songId)

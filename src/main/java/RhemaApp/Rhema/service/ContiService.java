@@ -9,6 +9,8 @@ import RhemaApp.Rhema.repository.ContiRepository;
 import RhemaApp.Rhema.repository.ContiSongRepository;
 import RhemaApp.Rhema.repository.SongRepository;
 import RhemaApp.Rhema.repository.UserRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,28 +51,41 @@ public class ContiService {
 
         conti.setCreated_at(new Date());
         conti.setUpdated_at(new Date());
-       // Conti savedConti = contiRepository.save(conti);
 
         List<Song> songs = songRepository.findAllById(request.getSongIds());
         for (Song song : songs) {
             ContiSong contiSong = new ContiSong();
             contiSong.setSong(song);
             conti.addContiSong(contiSong);
-            //contiSongRepository.save(contiSong);
         }
 
         return contiRepository.save(conti);
     }
 
-    public Conti updateConti(CreateContiRequestDTO request) {
-        Conti conti = contiRepository.findById(request.getCreatedBy())
-                .orElseThrow(() -> new RuntimeException("해당 콘티를 발견할 수 없습니다."));
+    @Transactional
+    public boolean updateConti(Long contiId, CreateContiRequestDTO request) throws JsonProcessingException {
+        Optional<Conti> optionalConti = contiRepository.findById(contiId);
+        if (optionalConti.isPresent()) {
+            Conti conti = optionalConti.get();
 
-        conti.setDate(request.getDate());
-        List<Song> songs = songRepository.findAllById(request.getSongIds());
-        conti.setUpdated_at(new Date());
+            contiSongRepository.deleteByContiId(contiId);
 
-        return contiRepository.save(conti);
+            conti.setDate(request.getDate());
+            conti.setUpdated_at(new Date());
+
+            List<Song> songs = songRepository.findAllById(request.getSongIds());
+            for (Song song : songs) {
+                ContiSong contiSong = new ContiSong();
+                contiSong.setSong(song);
+                contiSong.setConti(conti);
+                conti.addContiSong(contiSong);
+            }
+
+            contiRepository.save(conti);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void deleteConti(Long contiId) {

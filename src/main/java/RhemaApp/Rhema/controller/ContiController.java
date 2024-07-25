@@ -4,7 +4,9 @@ import RhemaApp.Rhema.dto.CreateContiRequestDTO;
 import RhemaApp.Rhema.dto.ResponseDTO;
 import RhemaApp.Rhema.entity.Conti;
 import RhemaApp.Rhema.service.ContiService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -30,9 +32,15 @@ public class ContiController {
         }
     }
 
-    @PatchMapping("/conti")
-    public Conti updateConti(@RequestBody CreateContiRequestDTO request) {
-        return contiService.updateConti(request);
+    @PatchMapping("/{contiid}")
+    public ResponseEntity<ResponseDTO<String>> updateConti(@PathVariable ("contiid") Long contiid, @RequestBody CreateContiRequestDTO request) throws JsonProcessingException {
+        boolean success = contiService.updateConti(contiid, request);
+        if (success) {
+            return ResponseEntity.ok(ResponseDTO.success("콘티 수정이 완료되었습니다."));
+        }
+        else {
+            return ResponseEntity.ok(ResponseDTO.error("콘티를 조회할 수 없습니다."));
+        }
     }
 
 
