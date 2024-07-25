@@ -88,7 +88,13 @@ public class ContiService {
         }
     }
 
-    public void deleteConti(Long contiId) {
-        contiRepository.deleteById(contiId);
+    @Transactional
+    public String deleteConti(Long contiId) {
+        Conti conti = contiRepository.findById(contiId)
+                .orElseThrow(()-> new RuntimeException("조회된 정보가 없습니다."));
+
+            contiSongRepository.deleteByContiId(contiId);
+            contiRepository.deleteById(contiId);
+            return "콘티가 정상적으로 삭제되었습니다.";
     }
 }
