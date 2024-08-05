@@ -12,8 +12,10 @@ import RhemaApp.Rhema.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -35,12 +37,12 @@ public class ContiService {
         this.contiSongRepository = contiSongRepository;
     }
 
-    public List<Date> getAllContiDates() {
-        return contiRepository.findAll()
-                .stream()
-                .map(Conti::getDate)
-                .collect(Collectors.toList());
-    }
+//    public List<String> getAllContiDates(String sort) {
+//        return contiRepository.findAll()
+//                .stream()
+//                .map(Conti::getDate)
+//                .collect(Collectors.toList());
+//    }
 
     public Conti saveConti(CreateContiRequestDTO request) {
         Conti conti = new Conti();
@@ -96,5 +98,19 @@ public class ContiService {
             contiSongRepository.deleteByContiId(contiId);
             contiRepository.deleteById(contiId);
             return "콘티가 정상적으로 삭제되었습니다.";
+    }
+
+
+    @Transactional
+    public List<String> getContiDates(String sort) {
+        Sort.Direction direction = "desc".equalsIgnoreCase(sort) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Sort sortByDate = Sort.by(direction, "date");
+
+        List<Conti> contis = contiRepository.findAll(sortByDate);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return contis.stream()
+                .map(conti -> dateFormat.format(conti.getDate()))
+                .collect(Collectors.toList());
     }
 }

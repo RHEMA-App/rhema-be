@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/conti")
 public class ContiController {
@@ -48,6 +51,16 @@ public class ContiController {
             return ResponseDTO.success("콘티 삭제 완료");
         } catch (RuntimeException e) {
             return ResponseDTO.error("콘티 삭제 실패");
+        }
+    }
+
+    @GetMapping("/dates")
+    public ResponseDTO<List<String>> getContiDates(@RequestParam(value = "sort", defaultValue = "asc") String sort) {
+        try {
+            List<String> dates = contiService.getContiDates(sort);
+            return ResponseDTO.success(dates);
+        } catch (Exception e) {
+            return ResponseDTO.error(List.of("날짜 조회 중 오류가 발생했습니다: " + e.getMessage()));
         }
     }
 }

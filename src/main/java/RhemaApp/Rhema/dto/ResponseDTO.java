@@ -15,7 +15,7 @@ public class ResponseDTO<T> {
         return new ResponseDTO<>(true, msg);
     }
 
-    public static ResponseDTO<String> error(String msg) {
+    public static <T> ResponseDTO<T> error(T msg) {
         return new ResponseDTO<>(false, msg);
     }
 }
