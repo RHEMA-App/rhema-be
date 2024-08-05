@@ -9,7 +9,7 @@ public class ContiSong {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "contiSong_id")
+    @Column(name = "conti_song_id")
     private Long id;
 
     @Getter
@@ -30,7 +30,8 @@ public class ContiSong {
         this.id = id;
     }
 
-    public void setConti() {
+
+    public void setConti(Conti conti) {
         this.conti = conti;
     }
 

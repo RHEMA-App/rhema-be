@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,8 +19,8 @@ public class Conti {
 
     private Date date;
 
-    @OneToMany(mappedBy = "conti")
-    private List<Song> songs;
+    @OneToMany(mappedBy = "conti", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ContiSong> contiSongs = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -27,5 +28,10 @@ public class Conti {
 
     private Date created_at;
     private Date updated_at;
+
+    public void addContiSong(ContiSong contiSong) {
+        contiSongs.add(contiSong);
+        contiSong.setConti(this);
+    }
 }
 
