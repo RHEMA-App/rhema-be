@@ -22,7 +22,7 @@ public class Song {
     private String score;
     private String key;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User created_by;
 

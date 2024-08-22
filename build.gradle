@@ -44,6 +44,13 @@ dependencies {
 	//health check
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+//	//jackson 라이브러리
+//	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
+
+	//aws-s3
+	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.4'
+	implementation 'io.awspring.cloud:spring-cloud-starter-aws-secrets-manager-config:2.4.4'
+
 }
 
 tasks.named('test') {

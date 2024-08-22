@@ -4,6 +4,7 @@ import RhemaApp.Rhema.dto.ResponseDTO;
 import RhemaApp.Rhema.dto.SongRequestDTO;
 import RhemaApp.Rhema.dto.SongResponseDTO;
 import RhemaApp.Rhema.entity.Song;
+import RhemaApp.Rhema.global.s3.S3FileService;
 import RhemaApp.Rhema.service.SongService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +12,19 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/songs")
 public class SongController {
 
     private SongService songService;
+    private final S3FileService s3FileService;
+
     @Autowired
-    public SongController (SongService songService) {
+    public SongController (SongService songService, S3FileService s3FileService) {
         this.songService = songService;
+        this.s3FileService = s3FileService;
     }
 
     //전체 노래 조회 + 키워드 조회
@@ -61,5 +66,11 @@ public class SongController {
         } catch (RuntimeException e) {
             return ResponseDTO.error("노래 삭제 중 오류가 발생하였습니다.");
         }
+    }
+
+    //S3 Presigned url 요청
+    @GetMapping("/score/{fileName}")
+    public Map<String, String> getSongPresignedUrl(@PathVariable(name="fileName") String fileName) {
+        return s3FileService.getPresignedUrl("/scores", fileName);
     }
 }

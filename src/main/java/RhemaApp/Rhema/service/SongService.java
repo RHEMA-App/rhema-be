@@ -93,9 +93,7 @@ public class SongService {
         sectionRepository.saveAll(sections);
 
 
-        SongResponseDTO responseDTO = new SongResponseDTO(saveSong);
-
-        return responseDTO;
+        return new SongResponseDTO(saveSong);
     }
 
     //노래 업데이트
