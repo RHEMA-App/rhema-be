@@ -19,7 +19,6 @@ public class Song {
     private Long id;
     private String link;
     private String name;
-    @Column(columnDefinition = "TEXT")
     private String score;
     private String key;
 
@@ -27,9 +26,8 @@ public class Song {
     @JoinColumn(name = "user_id")
     private User created_by;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "conti_id")
-    private Conti conti;
+    @OneToMany(mappedBy = "song", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ContiSong> contiSongs;
 
     private Date created_at;
     private Date updated_at;
