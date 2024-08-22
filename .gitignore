@@ -38,3 +38,6 @@ out/
 
 ### application.properties file ###
 application.properties
+
+### mac os file ###
+.DS_Store
